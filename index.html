@@ -11,43 +11,75 @@
   <h1>Test web page</h1>
 <p>This page is used to test functionalities of DS3 and other client and
   server-side libraries.</p>
-<hr />
-<p>Click button below to add and remove points/p>
-  <!-- <form>
-    Start date:<br>
-    <input type="text" id, name="startdate"><br>
-    End date:<br>
-    <input type="text" id, name="enddate">
-
-  </form> -->
-<button onclick="myFunction()">Add data</button>
-<button onclick="removeItem()">Remove data</button>
-<p id="dynamic"></p>
+<hr/>
+<h1>Time series plot</h1>
+<button onclick="class1()">Class 1</button>
+<button onclick="class2()">Class 2</button>
+<button onclick="class3()">Class 3</button>
+<div id="plot"></div>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/data_utils.js" charset="utf-8"></script>
 <script>
-var myData = [4, 8, 15, 16, 23, 42];
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-function updateText() {
-  var pDynamic = d3.select("body").selectAll("#dynamic")
-      .data(myData)
-      .text(function(d, idx) { return ("I am paragrah of idx: " + idx +
-        " with value: "+ d); });
-      // Enter…
-  pDynamic.enter().append("p")
-    .text(function(d, idx) { return ("I am paragrah of idx: " + idx +
-      " with value: "+ d); })
-    .attr("id", "dynamic")
-  pDynamic.exit().attr("style", "color:red;").text("I was removed!");
-}
-function myFunction() {
-  myData.push(75);
-  updateText();
-}
+var parseDate = d3.time.format("%Y%m%d").parse;
 
-function removeItem() {
-  myData.pop();
-  updateText();
-}
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var lineMean = d3.svg.line()
+    .interpolate("spline")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.mean); });
+
+var lineMin = d3.svg.line()
+    .interpolate("spline")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.min); });
+
+var lineMax = d3.svg.line()
+    .interpolate("spline")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.max); });
+
+var mainGroup = d3.select("#plot").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("id", "maingroup");
+
+mainGroup.append("rect")
+    .attr("class", "idle")
+    .attr("x", -margin.left)
+    .attr("y", -margin.top)
+    .attr("width", width)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("style", "fill:lightgray");
+mainGroup.append("text")
+    .attr("class", "idle")
+    .text("Click one of the button above in order to load the data")
+    .attr("x", 0)
+    .attr("y", height / 2)
+    .attr("fill", "black")
+
+var plotInitialized = false;
+var dataClass1;
 </script>
 </body>
 </html>
