@@ -1,3 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+.menu {
+    width: 25%;
+    float: left;
+}
+.main {
+    width: 75%;
+    float: left;
+}
+
 body {
     font-size: 100%;
     font-family: sans-serif;

@@ -1,99 +1,114 @@
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="HTML, XHTML, JavaScript, DS3">
+<meta name="description" content="Test webpage for DS3">
+<meta name="author" content="Luca Parolini">
 <head>
-    <link rel="stylesheet" href="basic.css">
+    <!-- <link rel="stylesheet" href="basic.css"> -->
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <title>Test webpage</title>
     <html lang="en-US">
     <title>Test web page</title>
 </head>
 <body>
+<div class="w3-light-grey" style="max-width:900px" id="main_container">
   <h1>Test web page</h1>
-<p>This page is used to test functionalities of DS3 and other client and
-  server-side libraries.</p>
-<hr/>
-<h1>Time series plot</h1>
-<button onclick="class1()">Class 1</button>
-<button onclick="class2()">Class 2</button>
-<button onclick="class3()">Class 3</button>
-<div id="plot"></div>
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="js/data_utils.js" charset="utf-8"></script>
-<script>
-var margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
+  <p>This page is used to test functionalities of DS3 and other client and
+    server-side libraries.</p>
+  <p>The CSS file has been taken from <a href="http://www.w3schools.com/lib/w3.css">here</a>.
+    Additional information on how to use the CSS file can be found
+    <a href="http://www.w3schools.com/w3css/w3css_references.asp">here</a>.
+  </p>
+  <hr/>
+  <h1>Time series plot</h1>
+  <button onclick="class1()">Class 1</button>
+  <button onclick="class2()">Class 2</button>
+  <button onclick="class3()">Class 3</button>
+  <div id="plot"></div>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="js/data_utils.js" charset="utf-8"></script>
+  <script src="js/apply_style.js"></script>
+  <script>
+    //$("#main_container").resize(aaddme);
+    var div_area = $("#main_container").width();
+    var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = div_area - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var parseDate = d3.time.format("%Y%m%d").parse;
+    var parseDate = d3.time.format("%Y%m%d").parse;
 
-var x = d3.time.scale()
+    var x = d3.time.scale()
     .range([0, width]);
 
-var y = d3.scale.linear()
+    var y = d3.scale.linear()
     .range([height, 0]);
 
-var color = d3.scale.category10();
+    var color = d3.scale.category10();
 
-var xAxis = d3.svg.axis()
+    var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
 
-var yAxis = d3.svg.axis()
+    var yAxis = d3.svg.axis()
     .scale(y)
     //.tickSize(-width)
     .orient("left");
 
-var lineMean = d3.svg.line()
+    var lineMean = d3.svg.line()
     .interpolate("spline")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.mean); });
 
-var lineMin = d3.svg.line()
+    var lineMin = d3.svg.line()
     .interpolate("spline")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.min); });
 
-var lineMax = d3.svg.line()
+    var lineMax = d3.svg.line()
     .interpolate("spline")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.max); });
 
-var uncertaintyArea = d3.svg.area()
+    var uncertaintyArea = d3.svg.area()
     .x0(function(d) { return x(d.date); })
     .x1(function(d) { return x(d.date); })
     .y0(function(d) { return y(d.min); })
     .y1(function(d) { return y(d.max); })
 
-var zoom = d3.behavior.zoom();
+    var zoom = d3.behavior.zoom();
 
-var mainGroup = d3.select("#plot").append("svg")
+    var mainGroup = d3.select("#plot").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .call(zoom)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr("id", "maingroup");
 
-mainGroup.append("rect")
+    mainGroup.append("rect")
     .attr("class", "idle")
     .attr("x", -margin.left)
     .attr("y", -margin.top)
-    .attr("width", width)
+    .attr("width", div_area)
     .attr("height", height + margin.top + margin.bottom)
     .attr("style", "fill:lightgray");
-mainGroup.append("text")
+    mainGroup.append("text")
     .attr("class", "idle")
     .text("Click one of the button above in order to load the data")
     .attr("x", 0)
     .attr("y", height / 2)
     .attr("fill", "black")
 
-var plotInitialized = false;
-var plotCreated = {class1: false, class2: false, class3: false};
-/*plotCreated.class1 = false;
-plotCreated.class2 = false;
-plotCreated.class3 = false;*/
-var dataClass1;
-</script>
+    var plotInitialized = false;
+    var plotCreated = {class1: false, class2: false, class3: false};
+    /*plotCreated.class1 = false;
+    plotCreated.class2 = false;
+    plotCreated.class3 = false;*/
+    var dataClass1;
+    </script>
+</div>
 </body>
 </html>
